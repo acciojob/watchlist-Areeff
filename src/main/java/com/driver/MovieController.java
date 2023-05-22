@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/movies")
 public class MovieController {
@@ -18,15 +20,15 @@ public class MovieController {
         String str=movieService.addDirector(director);
         return new ResponseEntity<>(str,HttpStatus.CREATED);
     }
-//    @PostMapping("/add-movie-director-pair")
-//    public ResponseEntity<String >addMovieDirectorPair(@RequestParam String movieName,@RequestParam String directorName){
-//        Strring str=movieService.addMovieDirectorPair(movieName,directorName);
-//        return new ResponseEntity<>(str,HttpStatus.CREATED);
-//    }
+    @PostMapping("/add-movie-director-pair")
+    public ResponseEntity<String >addMovieDirectorPair(@RequestParam String movieName,@RequestParam String directorName){
+        String str=movieService.addMovieDirectorPair(movieName,directorName);
+        return new ResponseEntity<>(str,HttpStatus.CREATED);
+    }
     @GetMapping("/get-movie-by-name/{name}")
-    public ResponseEntity<Movie> getMovieByName(@PathVariable String movieName){
+    public ResponseEntity<Movie> getMovieByName(@PathVariable String name){
         try{
-            Movie movie=movieService.getMovieByName(movieName);
+            Movie movie=movieService.getMovieByName(name);
             return new ResponseEntity<>(movie,HttpStatus.OK);
         }catch (movieNotFoundExcepion ex){
             return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
@@ -35,11 +37,30 @@ public class MovieController {
     @GetMapping("/get-director-by-name/{name}")
     public  ResponseEntity<Director>getDirectorByName(@PathVariable String name){
         try{
-            Director directorname=movieService.getDirectorByName(name);
+            Director directorname =movieService.getDirectorByName(name);
             return  new ResponseEntity<>(directorname,HttpStatus.OK);
         }catch(DirectorNotFoundException ex){
             return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
         }
-
+    }
+    @GetMapping("/movies/get-movies-by-director-name/{director}")
+    public ResponseEntity<List<String>> getMoviesByDirectorName(@PathVariable String director){
+            List<String> moviesList=movieService.getMoviesByDirectorName(director);
+            return new ResponseEntity<>(moviesList,HttpStatus.OK);
+    }
+    @GetMapping("/movies/get-all-movies")
+    public ResponseEntity<List<String>>findAllMovies(){
+        List<String>Allmovies=movieService.getAllMovies();
+        return new ResponseEntity<>(Allmovies,HttpStatus.OK);
+    }
+    @DeleteMapping("/movies/delete-director-by-name")
+    public ResponseEntity<String>deleteDirectorByName(@RequestParam String direcor){
+        String str=movieService.deletedirector(direcor);
+        return new ResponseEntity<>(str,HttpStatus.OK);
+    }
+    @DeleteMapping("/movies/delete-all-directors")
+    public ResponseEntity<String>deleteAllDirectors(){
+        String str=movieService.deleteAlldirector();
+        return new ResponseEntity<>(str,HttpStatus.OK);
     }
 }
