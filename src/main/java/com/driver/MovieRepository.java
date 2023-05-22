@@ -45,9 +45,10 @@ public class MovieRepository {
     }
 
     public List<String> getMoviesbyDirectorName(String director) {
-        List<String> movies=new ArrayList<>();
-        if(movieDirectorPair.containsKey(director)) movies=movieDirectorPair.get(director);
-        return movies;
+//        List<String> movies=new ArrayList<>();
+//        if(movieDirectorPair.containsKey(director)) movies=movieDirectorPair.get(director);
+//        return movies;
+        return new ArrayList<>(movieDirectorPair.get(director));
     }
 
     public List<String> getAllMovieNames() {
