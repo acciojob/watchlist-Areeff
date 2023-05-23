@@ -2,6 +2,7 @@ package com.driver;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class MovieService {
     MovieRepository movieRepository=new MovieRepository();
@@ -37,9 +38,15 @@ public class MovieService {
 
 
     public String addMovieDirectorPair(String movieName, String directorName) {
-        if(Objects.nonNull(movieRepository.findMovie(movieName))&&Objects.nonNull(movieRepository.findDirector(directorName))){
-            movieRepository.addMovieDirectorPair(movieName,directorName);
+        Optional<Movie> movie=movieRepository.getMovie(movieName);
+        Optional<Director> director=movieRepository.getDirector(directorName);
+        if(movie.isEmpty()){
+            throw new movieNotFoundExcepion();
         }
+        if(director.isEmpty()){
+            throw new DirectorNotFoundException();
+        }
+        movieRepository.addMovieDirectorPair(movieName,directorName);
         return "Added Pair successfully";
     }
 

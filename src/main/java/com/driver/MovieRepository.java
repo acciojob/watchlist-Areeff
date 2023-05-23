@@ -3,6 +3,7 @@ package com.driver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class MovieRepository {
     private HashMap<String,Movie>moviedata=new HashMap<>();
@@ -36,11 +37,8 @@ public class MovieRepository {
     }
 
     public void addMovieDirectorPair(String movieName, String directorName) {
-        List<String> addPair=new ArrayList<>();
-        if(movieDirectorPair.containsKey(directorName)){
-            addPair=movieDirectorPair.get(directorName);
-            addPair.add(movieName);
-        }
+        List<String> addPair=movieDirectorPair.getOrDefault(directorName,new ArrayList<>());
+        addPair.add(movieName);
         movieDirectorPair.put(directorName,addPair);
     }
 
@@ -66,5 +64,19 @@ public class MovieRepository {
 
     public List<String> getlistOfDirectorsName() {
         return new ArrayList<>(directordata.keySet());
+    }
+
+    public Optional<Movie> getMovie(String movieName) {
+        if(moviedata.containsKey(movieName)){
+            return Optional.of(moviedata.get(movieName));
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Director> getDirector(String directorName) {
+        if(directordata.containsKey(directorName)){
+            return Optional.of(directordata.get(directorName));
+        }
+        return Optional.empty();
     }
 }
